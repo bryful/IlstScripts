@@ -50,7 +50,7 @@
 		var cx = ((rct[0] + rct[2])/2);
 		var cy = ((rct[1] + rct[3])/2);
 
-		var selObj = app.activeDocument.selection
+		var selObj = app.activeDocument.selection;
 
 		for ( var i=0; i<selObj.length;i++)
 		{
