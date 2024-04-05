@@ -1,4 +1,5 @@
-(function (me){
+#targetengine "main"
+(function (){
 	var pref = {};
 	pref.unitMode = 0;
 	pref.moveV = 10;
@@ -406,4 +407,4 @@
 	}
 	createDialog();
 	savePref();
-})(this);
+})();
