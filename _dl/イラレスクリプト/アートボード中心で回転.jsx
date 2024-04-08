@@ -123,29 +123,31 @@
 		obj.left = nx + cx - obj.width/2;
 		obj.top  = ny + cy + obj.height/2;
 		if (rFlag) obj.rotate(r);
+		return p.len;
 	}
 	// ******************************************************************
 	var exec = function(c,o,r,fFlag)
 	{
+		var execInfo ={};
+		execInfo.objs =[];
+		execInfo.radius =0;
 		app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
 		var ret = true;
 		var selObj = app.activeDocument.selection
 		if ( (selObj==null)||(selObj.length!=1) )
 		{
 			alert("１個だけ選択してください");
-			return ret;
+			return exec;
 		}
 		if ((typeof(c)!="number")||(typeof(o)!="number")||(typeof(r)!="number"))
 		{
 			alert("パラメータが異常です");
-			ret = false;
-			return ret;
+			return execInfo;
 		}
 		if (c<=0)
 		{
 			alert("copiesは1以上で");
-			ret = false;
-			return ret;
+			return execInfo;
 		}
 		// アートボードの中心
 		// 中心を求める
@@ -156,84 +158,181 @@
 
 		if (o!=0)
 		{
-			rotObject(selObj[0],r*o,cx,cy,fFlag);
+			execInfo.radius = rotObject(selObj[0],r*o,cx,cy,fFlag);
 		}
+			execInfo.objs.push(selObj[0]);
 		if (c>1)
 		{
 			for(var i=1; i<c;i++)
 			{
 				var no = selObj[0].duplicate();
-				rotObject(no, r*i,cx,cy,fFlag);
+				execInfo.radius = rotObject(no, r*i,cx,cy,fFlag);
+				execInfo.objs.push(no);
 			}
 		}
 		pref.copies = c;
 		pref.offset = o;
 		pref.rot = r;
 		pref.rotFlag = fFlag;
+		app.redraw();
 		savePref();
+
+		return execInfo;
+	}
+	// ******************************************************************
+	var setRadius = function(objs,ar)
+	{
+		var ret =0;
+		var idx = app.activeDocument.artboards.getActiveArtboardIndex();
+		var rct = app.activeDocument.artboards[idx].artboardRect;
+		var cx = (rct[2]+rct[0])/2;
+		var cy = (rct[3]+rct[1])/2;
+
+		for (var i=0; i<objs.length;i++)
+		{
+			var o = objs[i];
+
+			var p = getRotLen(o,cx,cy);
+			ret = p.len+ar;
+			if (ret <0) ret =0;
+			var nx = (ret) * Math.cos( p.r*Math.PI/180);
+			var ny = (ret) * Math.sin( p.r*Math.PI/180);
+			o.left = nx + cx - o.width/2;
+			o.top  = ny + cy + o.height/2;
+		}
 
 		return ret;
 	}
 	// ******************************************************************
-	var createDilaog = function()
+	var getED = function(ed)
 	{
-		var winObj = new Window('dialog{text:"回転",orientation : "column", properties : {resizeable : true} }');
-		var res1 =
-		'Group{alignment: ["fill", "fill" ],orientation:"column",preferredSize:[300,100],\
-		gCopies:Group{alignment:["fill","top"],orientation:"row",\
-		stCopies:StaticText{alignment:["fill","top"],maximumSize:[40,25],text:"Copies"},\
-		edCopies:EditText{alignment:["fill","top"],text:"3"},\
-		stOffset:StaticText{alignment:["fill","top"],maximumSize:[40,25],text:"Offset"},\
-		edOffset:EditText{alignment:["fill","top"],text:"0"}},\
-		gRot:Group{alignment:["fill","top"],orientation:"row",\
-		stRot:StaticText{alignment:["fill","top"],maximumSize:[50,25],text:"Rotation"},\
-		edRot:EditText{alignment:["fill","top"],text:"0"}},\
-		gMode:Group{alignment:["fill","top"],orientation:"row",\
-		cbRot:Checkbox{alignment:["fill","top"],text:"回転する時、オブジェクトも回転する",value:true}},\
-		gExec:Group{alignment:["fill","top"],orientation:"row",\
-		btnCancel:Button{alignment:["fill","top"],text:"Cancel"},\
-		btnOK:Button{alignment:["fill","top"],text:"OK"}}\
-		}';
-		winObj.gr = winObj.add(res1);
-		winObj.gr.gCopies.edCopies.text = pref.copies+"";
-		winObj.gr.gCopies.edOffset.text = pref.offset+"";
-		winObj.gr.gRot.edRot.text = pref.rot;
-		winObj.gr.gMode.cbRot.value = pref.rotFlag
-		winObj.layout.layout();
-		winObj.onResize = function()
-		{
-			winObj.layout.resize();
+		var ret = null;
+		try{
+			var o = eval(ed.text);
+			if (typeof(o)=="number")
+			{
+				ret = o;
+			}
+		}catch(e){
 		}
-		winObj.gr.gExec.btnCancel.onClick=function(){winObj.close();}
-		winObj.gr.gExec.btnOK.onClick=function()
-		{
-			var c = 0;
-			var o = 0;
-			var r = 0;
-			var f = true;
-			try{
-				c = eval(winObj.gr.gCopies.edCopies.text);
-				o = eval(winObj.gr.gCopies.edOffset.text);
-				r = eval(winObj.gr.gRot.edRot.text);
-				f = winObj.gr.gMode.cbRot.value;
+		return ret;
+	}
+	// ******************************************************************
 
-			}catch(e){
-				alert(e.toString());
+	var createUI = function()
+	{
+		var winObj = new Window("dialog","アートボードで回転" ,[785,429,785+349,429+150] );
+		var stCopies = winObj.add("statictext",[12,10,12+55,10+20], "Copies" );
+		var edCopies = winObj.add("edittext", [73,10,73+60,10+20], "72" );
+		var stOffset = winObj.add("statictext",[146,10,146+55,10+20], "Offset" );
+		var edOffset = winObj.add("edittext", [207,10,207+60,10+20], "0" );
+		var stRot = winObj.add("statictext",[12,35,12+55,35+18], "Rotation" );
+		var edRot = winObj.add("edittext", [73,35,73+60,35+21], "5" );
+		var cbObjRot = winObj.add("checkbox", [146,35,146+191,35+20], "回転時、オブジェクトも回転");
+		cbObjRot.value = true;
+		var btnApply = winObj.add("button", [146,61,146+108,61+30], "Apply");
+		var btnUndo = winObj.add("button", [12,62,12+81,62+30], "Undo");
+		var btnAddRadius = winObj.add("button", [180,105,180+68,105+20], "半径足す");
+		var btnIncRadius = winObj.add("button", [254,105,254+68,105+20], "半径引く");
+		var edRadius = winObj.add("edittext", [99,105,99+75,105+20], "1" );
+		var stRadius = winObj.add("statictext",[12,108,12+81,108+20], "---------------" );
+		var btnClose = winObj.add("button", [273,62,273+49,62+30], "close");
+
+
+		edCopies.text = pref.copies+"";
+		edOffset.text = pref.offset+"";
+		edRot.text = pref.rot;
+		cbObjRot.value = pref.rotFlag;
+		function SetEnabled(sw)
+		{
+			edCopies.enabled = sw;
+			edOffset.enabled = sw;
+			edRot.enabled = sw;
+			cbObjRot.enabled = sw;
+			btnApply.enabled = sw;
+			btnUndo.enabled = ! sw;
+			btnAddRadius.enabled = ! sw;
+			btnIncRadius.enabled = ! sw;
+			edRadius.enabled = ! sw;
+		}
+		SetEnabled(true);
+		btnClose.onClick = function()
+		{
+			winObj.close();
+		}
+		var undoCount =0;
+		var execInfo ={};
+		execInfo.radius =0;
+		execInfo.objs=[];
+		function execSub()
+		{
+			var c = getED(edCopies);
+			var o = getED(edOffset);
+			var r = getED(edRot);
+			var f = cbObjRot.value;
+			if ((c==null)||(o==null)||(r==null))
+			{
+				alert("パラメータが異常");
 				return;
 			}
-
-			if (exec(c,o,r,f)==true)
+			execInfo = exec(c,o,r,f);
+			stRadius.text = "";
+			if (execInfo.objs.length>0)
 			{
-				winObj.close();
+				undoCount+=1;
+				SetEnabled(false);
+				stRadius.text = execInfo.radius;
 			}
+		}
+		btnApply.onClick = execSub;
+		btnUndo.onClick=function()
+		{
+			app.undo();
+			app.redraw();
+			undoCount-=1;
+			if (undoCount<=0)
+			{
+				SetEnabled(true);
+				stRadius.text = "";
+			}
+		}
+		function radiusExec (op)
+		{
+			if (execInfo.radius==0) return;
+			var r = getED(edRadius);
+			if(r!=null)
+			{
+				r *= op;
+				var r2 = execInfo.radius + r;
+				if (r2>0){
+					var r3 = setRadius(execInfo.objs,r);
+					stRadius.text = r3 +"";
+					app.redraw();
+					undoCount++;
+				}
+			}
+		}
+		btnAddRadius.onClick = function()
+		{
+			radiusExec(1);
+		}
+		btnIncRadius.onClick = function()
+		{
+			radiusExec(-1);
 		}
 
 		winObj.center();
 		winObj.show();
-
 	}
 	if (app.activeDocument!=null)
 	{
-		createDilaog();
+		if (app.activeDocument.selection.length!=1)
+		{
+			alert("１個だけ選択してください");
+			return;
+		}else{
+			createUI();
+		}
+		//createDilaog();
 	}
 })(this);

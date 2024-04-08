@@ -82,27 +82,59 @@
 	}
 
 	// ********************************************************************************
-	var modeDialog = function()
+	var creasteUI = function()
 	{
-		var winObj = new Window('dialog{text:"反転",orientation : "column", properties : {resizeable : true} }');
-		var res1 =
-'Group{alignment: ["fill", "fill" ],orientation:"column",preferredSize:[300,100],\
-btnH:Button{alignment:["fill","top"],text:"左右反転"},\
-btnV:Button{alignment:["fill","top"],text:"上下反転"},\
-btnHV:Button{alignment:["fill","top"],text:"上下左右"}\
-}';
-		winObj.gr = winObj.add(res1 );
-		winObj.layout.layout();
-		winObj.onResize = function()
+		if ((app.activeDocument==null)||(app.activeDocument.selection.length<=0))
 		{
-			winObj.layout.resize();
+			alert("なんか選択してください");
+			return;
 		}
-		winObj.gr.btnH.onClick = function(){ flip(0); winObj.close();};
-		winObj.gr.btnV.onClick = function(){ flip(1); winObj.close();};
-		winObj.gr.btnHV.onClick = function(){ flip(2); winObj.close();};
+		var x= 12;
+		var y= 12;
+
+		var winObj = new Window("dialog","アートボードで反転" ,[0,0,150,194] );
+		var btnH = winObj.add("button", [x,y,x+126,y+30], "左右複製");
+		y +=35;
+		var btnV = winObj.add("button", [x,y,x+126,y+30], "上下複製");
+		y +=35;
+		var btnHV = winObj.add("button", [x,y,x+126,y+30], "上下左右で複製");
+		y +=35;
+		var btnUndo = winObj.add("button", [x,y,x+126,y+30], "Undo");
+		btnUndo.enabled = false;
+		y +=35;
+		var btnClose = winObj.add("button", [x,y,x+126,y+30], "Close");
+
+		btnH.onClick = function(){
+			flip(0);
+			app.redraw();
+			btnH.enabled = btnV.enabled = btnHV.enabled = false;
+			btnUndo.enabled = true;
+		};
+		btnV.onClick = function(){
+			flip(1);
+			app.redraw();
+			btnH.enabled = btnV.enabled = btnHV.enabled = false;
+			btnUndo.enabled = true;
+		};
+		btnHV.onClick = function(){
+			flip(2);
+			app.redraw();
+			btnH.enabled = btnV.enabled = btnHV.enabled = false;
+			btnUndo.enabled = true;
+		};
+		btnUndo.onClick = function(){
+			app.undo();
+			app.redraw();
+			btnH.enabled = btnV.enabled = btnHV.enabled = true;
+			btnUndo.enabled = false;
+		};
+		btnClose.onClick = function(){
+			winObj.close();
+		};
+
 
 		winObj.center();
 		winObj.show();
 	}
-	modeDialog();
+	creasteUI();
 })(this);

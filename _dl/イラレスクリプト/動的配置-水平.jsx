@@ -1,4 +1,8 @@
-(function (me){
+#targetengine main
+
+var bry_AA_hor = {};
+
+(function (){
 	var pref = {};
 	pref.unitMode = 0;
 	pref.moveV = 10;
@@ -7,6 +11,20 @@
 
 	var scriptName ="動的配置-水平";
 
+
+
+	// ****************************************************************************************************************
+	var selObjects = function()
+	{
+		var ret = [];
+		try{
+			ret = app.activeDocument.selection;
+		}catch(e)
+		{
+			alert(e.toString());
+		}
+		return ret;
+	}
  // 環境設定ファイルのFileオブジェクトを返す
     // 無かったらフォルダの作成も行う
     // "C:\Users\<ユーザー名>\AppData\Roaming\bry-ful\aep置き換え\aep置き換え.pref"
@@ -180,7 +198,7 @@
 	// ****************************************************************************************************************
 	var moveObject = function(mv,mode)
 	{
-		var selObj = app.activeDocument.selection;
+		var selObj =selObjects();
 		if(selObj.length<=1) return;
 		selObj = sortX(selObj);
 
@@ -259,6 +277,7 @@
 		}
 		app.redraw();
 	}
+
 	// ****************************************************************************************************************
 	var createDialog = function()
 	{
@@ -398,12 +417,16 @@
 			if(w==null) return;
 			moveObject(w,2);
 		}
-
+		winObj.onClose = function()
+		{
+			savePref();
+		}
 
 		winObj.center();
 		winObj.show();
 
+
 	}
 	createDialog();
 	savePref();
-})(this);
+})();

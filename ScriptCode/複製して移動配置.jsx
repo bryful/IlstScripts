@@ -6,6 +6,7 @@
 	pref.ypos = 0;
 	pref.unit = 0; // 0: mm 1:point 2: pixel
 	pref.dpi = 300;
+	var scriptName ="複製して移動配置";
 
 
  // 環境設定ファイルのFileオブジェクトを返す
@@ -16,7 +17,6 @@
         var ret = "noret";
         var pff = "none";
         var pff2 = "none2";
-		var scriptName ="複製して移動配置";
 
         try{
             pff = new Folder(Folder.userData.fullName+"/bry-ful");
@@ -241,109 +241,123 @@
 		return ret;
 	}
 	// ******************************************************************
-	var createDilaog = function()
-	{
-		var winObj = new Window('dialog{text:"配置",orientation : "column", properties : {resizeable : true} }');
-		var res1 =
-		'Group{alignment: ["fill", "fill" ],orientation:"column",preferredSize:[300,100],\
-		gCopies:Group{alignment:["fill","top"],orientation:"row",\
-		stCopies:StaticText{alignment:["fill","top"],maximumSize:[40,25],text:"Copies"},\
-		edCopies:EditText{alignment:["fill","top"],text:"3"},\
-		stOffset:StaticText{alignment:["fill","top"],maximumSize:[40,25],text:"Offset"},\
-		edOffset:EditText{alignment:["fill","top"],text:"0"}},\
-		gPos:Group{alignment:["fill","top"],orientation:"row",\
-		stX:StaticText{alignment:["fill","top"],maximumSize:[40,25],text:"X"},\
-		edX:EditText{alignment:["fill","top"],text:"0"},\
-		stY:StaticText{alignment:["fill","top"],maximumSize:[40,25],text:"Y"},\
-		edY:EditText{alignment:["fill","top"],text:"0"}},\
-		gUnit:Group{alignment:["fill","top"],orientation:"row",\
-		stUnit:StaticText{alignment:["left","top"],text:"指定単位"},\
-		rbMM:RadioButton{alignment:["left","top"],text:"mm",value:true},\
-		rbPoint:RadioButton{alignment:["left","top"],text:"Point",value:false},\
-		rbPixel:RadioButton{alignment:["left","top"],text:"Pixel",value:false},\
-		edDpi:EditText{alignment:["fill","top"],enabled:false,text:"300"}},\
-		gExec:Group{alignment:["fill","top"],orientation:"row",\
-		btnCancel:Button{alignment:["fill","top"],text:"Cancel"},\
-		btnOK:Button{alignment:["fill","top"],text:"OK"}}\
-		}';
-		winObj.gr = winObj.add(res1);
-		winObj.gr.gCopies.edCopies.text = pref.copies+"";
-		winObj.gr.gCopies.edOffset.text = pref.offset+"";
-		winObj.gr.gPos.edX.text = pref.xpos +"";
-		winObj.gr.gPos.edY.text = pref.ypos +"";
-		switch (pref.unit)
-		{
-			case 0:
-				winObj.gr.gUnit.rbMM.value=true;
-				break;
-			case 1:
-				winObj.gr.gUnit.rbPoint.value=true;
-				break;
-			case 2:
-				winObj.gr.gUnit.rbPixel.value=true;
-				winObj.gr.gUnit.edDpi.enabled = true;
-			break;
-		}
-		winObj.gr.gUnit.rbMM.onClick=onClick= function()
-		{
-			pref.unit =0;
-			winObj.gr.gUnit.edDpi.enabled = false;
-		}
-		winObj.gr.gUnit.rbPoint.onClick=onClick= function()
-		{
-			pref.unit =1;
-			winObj.gr.gUnit.edDpi.enabled = false;
-		}
-		winObj.gr.gUnit.rbPixel.onClick= function()
-		{
-			pref.unit =2;
-			winObj.gr.gUnit.edDpi.enabled = true;
-		}
-		winObj.layout.layout();
-		winObj.onResize = function()
-		{
-			winObj.layout.resize();
-		}
-		winObj.gr.gExec.btnCancel.onClick=function(){winObj.close();}
-		winObj.gr.gExec.btnOK.onClick=function()
-		{
-			var c = 0;
-			var o = 0;
-			var x = 0;
-			var y = 0;
-			var dpi = 300;
-			try{
-				c = eval(winObj.gr.gCopies.edCopies.text);
-				o = eval(winObj.gr.gCopies.edOffset.text);
-				x = eval(winObj.gr.gPos.edX.text);
-				y = eval(winObj.gr.gPos.edY.text);
-				try{
-				dpi = eval(winObj.gr.gUnit.edDpi.text);
-				if (dpi<72) dpi =72;
-				}catch(e){
-					dpi=300;
-					winObj.gr.stUnit.edDpi.text=dpi+"";
-					return;
-				}
 
-			}catch(e){
-				alert(e.toString());
+	// ******************************************************************
+	var getED = function(ed)
+	{
+		var ret = null;
+		try{
+			var o = eval(ed.text);
+			if (typeof(o)=="number")
+			{
+				ret = o;
+			}
+		}catch(e){
+		}
+		return ret;
+	}
+	// ******************************************************************
+	var createUI=function()
+	{
+		var winObj = new Window("dialog",scriptName ,[0,0,320,150] );
+		var stCopies = winObj.add("statictext",[12,12,12+55,12+20], "Copies" );
+		var edCopies = winObj.add("edittext", [73,12,73+60,12+20], pref.copies +"");
+		var stOffset = winObj.add("statictext",[146,12,146+55,12+20], "Offset" );
+		var edOffset = winObj.add("edittext", [207,12,207+60,12+20], pref.offset );
+		var stX = winObj.add("statictext",[12,38,12+55,38+20], "X" );
+		var edX = winObj.add("edittext", [73,38,73+60,38+20], pref.xpos );
+		var stY = winObj.add("statictext",[146,38,146+55,38+20], "Y" );
+		var edY = winObj.add("edittext", [207,38,207+60,38+20], pref.ypos );
+		var stUnit = winObj.add("statictext",[12,69,12+55,69+20], "単位" );
+		var rbMM = winObj.add("radiobutton", [77,69,77+50,69+20], "mm");
+		rbMM.value = true;
+		var rbPoint = winObj.add("radiobutton", [130,69,130+50,69+20], "Point");
+		rbPoint.value = false;
+		var rbPixel = winObj.add("radiobutton", [186,69,186+50,69+20], "Pixel");
+		rbPixel.value = false;
+		var edDpi = winObj.add("edittext", [241,69,241+60,69+20], "300" );
+		var btnApply = winObj.add("button", [92,98,92+130,98+36], "Apply");
+		var btnUndo = winObj.add("button", [12,98,12+74,98+36], "Undo");
+		var btnClose = winObj.add("button", [227,98,227+74,98+36], "Close");
+
+		var rbs = [];
+		rbs.push(rbMM);
+		rbs.push(rbPoint);
+		rbs.push(rbPixel);
+		for (var i=0; i<rbs.length; i++)
+		{
+			rbs[i].cIndex=i;
+			rbs[i].onClick = function()
+			{
+				pref.unit = this.cIndex;
+				edDpi.enabled = (pref.unit ==2);
+			}
+		}
+		rbs[pref.unit].value = true;
+
+		function setEnabled(sw)
+		{
+			rbs[0].enabled = rbs[1].enabled = rbs[2].enabled = sw;
+			if (sw==false)
+			{
+				edDpi.enabled = false;
+			}else{
+				edDpi.enabled = (pref.unit ==2);
+			}
+			btnApply.enabled = sw;
+			btnUndo.enabled = !sw;
+
+		}
+		setEnabled(true);
+		var undoCount =0;
+		btnApply.onClick = function()
+		{
+			var c = getED(edCopies);
+			if (c==null){alert("copies err"); return;}
+			c = Math.floor(c);
+			if(c<=0){
+				alert("複製は１個以上で");
 				return;
 			}
-			pref.dpi = dpi;
+			var o = getED(edOffset);
+			if (o==null){alert("offset err"); return;}
+			var x = getED(edX);
+			if (x==null){alert("x err"); return;}
+			var y = getED(edY);
+			if (y==null){alert("y err"); return;}
+			var dpi = getED(edDpi);
+			if (dpi!=null)
+			{
+				pref.dpi = dpi;
+			}else{
+				alert("dpi err");
+				return;
+			}
 
 			if (exec(c,o,x,y)==true)
 			{
-				winObj.close();
+				undoCount+=1;
+				setEnabled(false);
+				app.redraw();
 			}
+		}
+		btnUndo.onClick = function()
+		{
+			if (undoCount<=0) return;
+			undoCount-=1;
+			setEnabled(true);
+			app.undo();
+			app.redraw();
 		}
 
 		winObj.center();
 		winObj.show();
-
 	}
+
 	if (app.activeDocument!=null)
 	{
-		createDilaog();
+		if(app.activeDocument.selection.length!=1)
+		{}
+		createUI();
 	}
 })(this);
