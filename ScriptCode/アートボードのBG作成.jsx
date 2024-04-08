@@ -1,103 +1,88 @@
-#target "illustrator"
-/*
-
-*/
-(function (me){
-	var createBG = function(cIndex)
+(function (){
+	var pref = {};
+	pref.index = 0;
+	var createUI = function()
 	{
-		app.coordinateSystem =
-		 CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
-		var ad = null;
-		try{
-			ad = app.activeDocument;
-			if(ad==null)
+		var createBG = function(cIndex)
+		{
+			var ad = app.activeDocument;
+			var ab = ad.artboards[ad.artboards.getActiveArtboardIndex()];
+			var rct = ab.artboardRect;
+
+			var lyr = ad.layers.add();
+			lyr.name = "Background";
+			try{
+				lyr.move(ad.layers[ad.layers.length-1],ElementPlacement.PLACEAFTER);
+			}catch(e)
 			{
-				alert("no actived Document");
-				return;
+				alert(e.toString());
 			}
-		}catch(e){
-			alert(e.toString());
-			return;
-		}
-		var ab = ad.artboards[ad.artboards.getActiveArtboardIndex()];
-		var rct = ab.artboardRect;
+			var rect = lyr.pathItems.rectangle( rct[1] ,rct[0], rct[2]-rct[1], -rct[3] - (-rct[1]) );
+			var col= new RGBColor();
+			switch (cIndex)
+			{
+				case 0:
+					rect.name = "black";
+					col.red =
+					col.green =
+					col.blue = 0;
+					break;
+				case 1:
+					rect.name = "white";
+					col.red =
+					col.green =
+					col.blue = 255;
+					break;
+				case 2:
+					rect.name = "noColor";
+					col = new NoColor();
+					break;
+			}
+			rect.fillColor = col;
+			rect.strokeColor = new NoColor();
 
-		var lyr = app.activeDocument.layers.add();
-		lyr.name = "Background";
-		try{
-			lyr.move(ad.layers[ad.layers.length-1],ElementPlacement.PLACEAFTER);
-		}catch(e)
-		{
-			alert(e.toString());
 		}
-		var rect = lyr.pathItems.rectangle( rct[1] ,rct[0], rct[2]-rct[1], -rct[3] - (-rct[1]) );
-		var col= new RGBColor();
-		switch (cIndex)
-		{
-			case 0:
-				rect.name = "black";
-				col.red =
-				col.green =
-				col.blue = 0;
-				break;
-			case 1:
-				rect.name = "white";
-				col.red =
-				col.green =
-				col.blue = 255;
-				break;
-			case 2:
-				rect.name = "noColor";
-				col = new NoColor();
-				break;
-		}
-		rect.fillColor = col;
-		rect.strokeColor = new NoColor();
+		var winObj = new Window("dialog","アートボードで回転" ,[0,0,0+290,0+130] );
+		var pCol = winObj.add("panel", [12,12,12+265,12+59]);
+		var rbBlack = pCol.add("radiobutton", [20,21,20+58,21+24], "Black");
+		var rbWhite = pCol.add("radiobutton", [94,21,94+58,21+24], "White");
+		var rbNo = pCol.add("radiobutton", [168,21,168+67,21+24], "NoColor");
+		var btnOK = winObj.add("button", [191,77,191+75,77+24], "OK");
+		var btnCancel = winObj.add("button", [106,77,106+75,77+24], "Cancel");
+		rbBlack.value = true;
 
-	}
-	var showDialog = function()
-	{
-		var winObj = new Window('dialog{text:"BG作成",orientation : "column", properties : {resizeable : true} }');
-		var res1 =
-'Group{alignment: ["fill", "fill" ],orientation:"column",preferredSize:[300,100],\
-gCol:Panel{alignment:["fill","top"],orientation:"row",text:"Background Color",\
-rbBlack:RadioButton{alignment:["fill","top"],text:"Black",value:true},\
-rbWhite:RadioButton{alignment:["fill","top"],text:"White"},\
-rbNo:RadioButton{alignment:["fill","top"],text:"NoColor"}},\
-gExec:Group{alignment:["fill","top"],orientation:"row",\
-btnCancel:Button{alignment:["fill","top"],text:"Cancel"},\
-btnOK:Button{alignment:["fill","top"],text:"OK"}}\
-}';
-		winObj.gr = winObj.add(res1);
-		winObj.cIndex = 0;
-		winObj.layout.layout();
-		winObj.onResize = function()
+		rbBlack.cIndex =0;
+		rbWhite.cIndex =1;
+		rbNo.cIndex    = 2;
+		rbBlack.onClick =
+		rbWhite.onClick =
+		rbNo.onClick = function()
 		{
-			winObj.layout.resize();
+			pref.index = this.cIndex;
 		}
-		winObj.gr.gCol.rbBlack.cIndex =0;
-		winObj.gr.gCol.rbWhite.cIndex =1;
-		winObj.gr.gCol.rbNo.cIndex =2;
-		winObj.gr.gCol.rbBlack.value = true;
 
-		winObj.gr.gCol.rbBlack.onClick =
-		winObj.gr.gCol.rbWhite.onClick =
-		winObj.gr.gCol.rbNo.onClick= function(){
-			winObj.cIndex = this.cIndex;
-		}
-		winObj.gr.gExec.btnCancel.onClick = function(){winObj.cIndex =
+
+
+		btnCancel.onClick = function(){
 			winObj.close();
 		};
-		winObj.gr.gExec.btnOK.onClick = function(){
-			createBG(winObj.cIndex);
+		btnOK.onClick = function(){
+			createBG(pref.index);
 			winObj.close();
 		};
 
 		winObj.center();
+
 		winObj.show();
 	}
 
-	showDialog();
+	if(app.activeDocument!=null)
+	{
+		createUI();
+
+	}else{
+		alert("no document");
+	}
 
 
-})(this);
+})();
