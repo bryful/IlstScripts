@@ -349,7 +349,10 @@
 			app.undo();
 			app.redraw();
 		}
-
+		btnClose.onClick = function()
+		{
+			winObj.close();
+		}
 		winObj.center();
 		winObj.show();
 	}

@@ -5,7 +5,8 @@
 (function (me){
 	var createBG = function(cIndex)
 	{
-		app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
+		app.coordinateSystem =
+		 CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
 		var ad = null;
 		try{
 			ad = app.activeDocument;
@@ -23,22 +24,27 @@
 
 		var lyr = app.activeDocument.layers.add();
 		lyr.name = "Background";
-		lyr.move(ad.layers[ad.layers.length-1],ElementPlacement.PLACEAFTER);
+		try{
+			lyr.move(ad.layers[ad.layers.length-1],ElementPlacement.PLACEAFTER);
+		}catch(e)
+		{
+			alert(e.toString());
+		}
 		var rect = lyr.pathItems.rectangle( rct[1] ,rct[0], rct[2]-rct[1], -rct[3] - (-rct[1]) );
 		var col= new RGBColor();
 		switch (cIndex)
 		{
 			case 0:
-				rect.name = "white";
-				col.red =
-				col.green =
-				col.blue = 255;
-				break;
-			case 1:
 				rect.name = "black";
 				col.red =
 				col.green =
 				col.blue = 0;
+				break;
+			case 1:
+				rect.name = "white";
+				col.red =
+				col.green =
+				col.blue = 255;
 				break;
 			case 2:
 				rect.name = "noColor";
@@ -72,9 +78,10 @@ btnOK:Button{alignment:["fill","top"],text:"OK"}}\
 		winObj.gr.gCol.rbBlack.cIndex =0;
 		winObj.gr.gCol.rbWhite.cIndex =1;
 		winObj.gr.gCol.rbNo.cIndex =2;
+		winObj.gr.gCol.rbBlack.value = true;
 
-		winObj.gr.gCol.rbBlack.onClick
-		winObj.gr.gCol.rbWhite.onClick
+		winObj.gr.gCol.rbBlack.onClick =
+		winObj.gr.gCol.rbWhite.onClick =
 		winObj.gr.gCol.rbNo.onClick= function(){
 			winObj.cIndex = this.cIndex;
 		}
