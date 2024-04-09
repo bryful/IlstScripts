@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<!-- saved from url=(0120)https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#installing-the-extension -->
+<html class="writer-html5" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Started with the VS Code Debugger — JavaScript Tools Guide CC 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="./launch_files/pygments.css">
+      <link rel="stylesheet" type="text/css" href="./launch_files/theme.css">
+      <link rel="stylesheet" type="text/css" href="./launch_files/extra.css">
+      <link rel="stylesheet" type="text/css" href="./launch_files/general.css">
+      <link rel="stylesheet" type="text/css" href="./launch_files/dark.css">
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script type="text/javascript" async="" src="./launch_files/analytics.js.ダウンロード"></script><script data-url_root="../" id="documentation_options" src="./launch_files/documentation_options.js.ダウンロード"></script>
+        <script src="./launch_files/jquery.js.ダウンロード"></script>
+        <script src="./launch_files/underscore.js.ダウンロード"></script>
+        <script src="./launch_files/_sphinx_javascript_frameworks_compat.js.ダウンロード"></script>
+        <script src="./launch_files/doctools.js.ダウンロード"></script>
+        <script async="async" src="./launch_files/readthedocs-doc-embed.js.ダウンロード"></script>
+        <script src="./launch_files/default_light.js.ダウンロード"></script>
+        <script src="./launch_files/theme_switcher.js.ダウンロード"></script>
+    <script src="./launch_files/theme.js.ダウンロード"></script>
+    <link rel="index" title="Index" href="https://extendscript.docsforadobe.dev/genindex.html">
+    <link rel="search" title="Search" href="https://extendscript.docsforadobe.dev/search.html">
+    <link rel="next" title="VS Code Extension Features" href="https://extendscript.docsforadobe.dev/vscode-debugger/vscode-extension-features.html">
+    <link rel="prev" title="The VS Code Debugger" href="https://extendscript.docsforadobe.dev/vscode-debugger/index.html"> 
+
+<!-- RTD Extra Head -->
+
+<link rel="stylesheet" href="./launch_files/readthedocs-doc-embed.css" type="text/css">
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "builder": "sphinx", "canonical_url": null, "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "vscode-debugger/getting-started-with-vscode-debugger", "programming_language": "words", "project": "javascript-tools-guide", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "sphinx_rtd_theme", "user_analytics_code": "", "version": "latest"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+<script type="text/javascript" src="./launch_files/readthedocs-analytics.js.ダウンロード" async="async"></script>
+
+<!-- end RTD <extrahead> -->
+<script src="./launch_files/js" type="text/javascript" async=""></script><script src="./launch_files/ethicalads.min.js.ダウンロード" type="text/javascript" async="" id="ethicaladsjs"></script><style>[data-ea-publisher].loaded,[data-ea-type].loaded{font-size:14px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-weight:normal;font-style:normal;leter-spacing:0px;vertical-align:baseline;line-height:1.3em}[data-ea-publisher].loaded a,[data-ea-type].loaded a{text-decoration:none}[data-ea-publisher].loaded .ea-pixel,[data-ea-type].loaded .ea-pixel{display:none}[data-ea-publisher].loaded .ea-content,[data-ea-type].loaded .ea-content{margin:1em 1em .5em 1em;padding:1em;background:rgba(0,0,0,.03);color:#505050}[data-ea-publisher].loaded .ea-content a:link,[data-ea-type].loaded .ea-content a:link{color:#505050}[data-ea-publisher].loaded .ea-content a:visited,[data-ea-type].loaded .ea-content a:visited{color:#505050}[data-ea-publisher].loaded .ea-content a:hover,[data-ea-type].loaded .ea-content a:hover{color:#373737}[data-ea-publisher].loaded .ea-content a:active,[data-ea-type].loaded .ea-content a:active{color:#373737}[data-ea-publisher].loaded .ea-content a strong,[data-ea-publisher].loaded .ea-content a b,[data-ea-type].loaded .ea-content a strong,[data-ea-type].loaded .ea-content a b{color:#088cdb}[data-ea-publisher].loaded .ea-callout a:link,[data-ea-type].loaded .ea-callout a:link{color:#6a6a6a}[data-ea-publisher].loaded .ea-callout a:visited,[data-ea-type].loaded .ea-callout a:visited{color:#6a6a6a}[data-ea-publisher].loaded .ea-callout a:hover,[data-ea-type].loaded .ea-callout a:hover{color:#505050}[data-ea-publisher].loaded .ea-callout a:active,[data-ea-type].loaded .ea-callout a:active{color:#505050}[data-ea-publisher].loaded .ea-callout a strong,[data-ea-publisher].loaded .ea-callout a b,[data-ea-type].loaded .ea-callout a strong,[data-ea-type].loaded .ea-callout a b{color:#088cdb}[data-ea-publisher].loaded .ea-callout a,[data-ea-type].loaded .ea-callout a{font-size:.8em}[data-ea-publisher].loaded.dark .ea-content,[data-ea-type].loaded.dark .ea-content{background:rgba(255,255,255,.05);color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:link,[data-ea-type].loaded.dark .ea-content a:link{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:visited,[data-ea-type].loaded.dark .ea-content a:visited{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-content a:hover,[data-ea-type].loaded.dark .ea-content a:hover{color:#f6f6f6}[data-ea-publisher].loaded.dark .ea-content a:active,[data-ea-type].loaded.dark .ea-content a:active{color:#f6f6f6}[data-ea-publisher].loaded.dark .ea-content a strong,[data-ea-publisher].loaded.dark .ea-content a b,[data-ea-type].loaded.dark .ea-content a strong,[data-ea-type].loaded.dark .ea-content a b{color:#50baf9}[data-ea-publisher].loaded.dark .ea-callout a:link,[data-ea-type].loaded.dark .ea-callout a:link{color:#c3c3c3}[data-ea-publisher].loaded.dark .ea-callout a:visited,[data-ea-type].loaded.dark .ea-callout a:visited{color:#c3c3c3}[data-ea-publisher].loaded.dark .ea-callout a:hover,[data-ea-type].loaded.dark .ea-callout a:hover{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-callout a:active,[data-ea-type].loaded.dark .ea-callout a:active{color:#dcdcdc}[data-ea-publisher].loaded.dark .ea-callout a strong,[data-ea-publisher].loaded.dark .ea-callout a b,[data-ea-type].loaded.dark .ea-callout a strong,[data-ea-type].loaded.dark .ea-callout a b{color:#50baf9}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.adaptive .ea-content,[data-ea-type].loaded.adaptive .ea-content{background:rgba(255,255,255,.05);color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:link,[data-ea-type].loaded.adaptive .ea-content a:link{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:visited,[data-ea-type].loaded.adaptive .ea-content a:visited{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-content a:hover,[data-ea-type].loaded.adaptive .ea-content a:hover{color:#f6f6f6}[data-ea-publisher].loaded.adaptive .ea-content a:active,[data-ea-type].loaded.adaptive .ea-content a:active{color:#f6f6f6}[data-ea-publisher].loaded.adaptive .ea-content a strong,[data-ea-publisher].loaded.adaptive .ea-content a b,[data-ea-type].loaded.adaptive .ea-content a strong,[data-ea-type].loaded.adaptive .ea-content a b{color:#50baf9}[data-ea-publisher].loaded.adaptive .ea-callout a:link,[data-ea-type].loaded.adaptive .ea-callout a:link{color:#c3c3c3}[data-ea-publisher].loaded.adaptive .ea-callout a:visited,[data-ea-type].loaded.adaptive .ea-callout a:visited{color:#c3c3c3}[data-ea-publisher].loaded.adaptive .ea-callout a:hover,[data-ea-type].loaded.adaptive .ea-callout a:hover{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-callout a:active,[data-ea-type].loaded.adaptive .ea-callout a:active{color:#dcdcdc}[data-ea-publisher].loaded.adaptive .ea-callout a strong,[data-ea-publisher].loaded.adaptive .ea-callout a b,[data-ea-type].loaded.adaptive .ea-callout a strong,[data-ea-type].loaded.adaptive .ea-callout a b{color:#50baf9}}[data-ea-publisher].loaded .ea-content,[data-ea-type].loaded .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.raised .ea-content,[data-ea-type].loaded.raised .ea-content{border:0px;border-radius:3px;box-shadow:0px 2px 3px rgba(0,0,0,.15)}[data-ea-publisher].loaded.bordered .ea-content,[data-ea-type].loaded.bordered .ea-content{border:1px solid rgba(0,0,0,.04);border-radius:3px;box-shadow:none}[data-ea-publisher].loaded.bordered.dark .ea-content,[data-ea-type].loaded.bordered.dark .ea-content{border:1px solid rgba(255,255,255,.07)}@media(prefers-color-scheme: dark){[data-ea-publisher].loaded.bordered.adaptive .ea-content,[data-ea-type].loaded.bordered.adaptive .ea-content{border:1px solid rgba(255,255,255,.07)}}[data-ea-publisher].loaded.flat .ea-content,[data-ea-type].loaded.flat .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-type=image].loaded,[data-ea-publisher]:not([data-ea-type]).loaded,.ea-type-image{display:inline-block}[data-ea-type=image].loaded .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content,.ea-type-image .ea-content{max-width:180px;overflow:auto;text-align:center}[data-ea-type=image].loaded .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>a>img,.ea-type-image .ea-content>a>img{width:120px;height:90px;display:inline-block}[data-ea-type=image].loaded .ea-content>.ea-text,[data-ea-publisher]:not([data-ea-type]).loaded .ea-content>.ea-text,.ea-type-image .ea-content>.ea-text{margin-top:1em;font-size:1em;text-align:center}[data-ea-type=image].loaded .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded .ea-callout,.ea-type-image .ea-callout{max-width:180px;margin:0em 1em 1em 1em;padding-left:1em;padding-right:1em;font-style:italic;text-align:right}[data-ea-type=image].loaded.horizontal .ea-content,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content,.ea-type-image.horizontal .ea-content{max-width:320px}[data-ea-type=image].loaded.horizontal .ea-content>a>img,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content>a>img,.ea-type-image.horizontal .ea-content>a>img{float:left;margin-right:1em}[data-ea-type=image].loaded.horizontal .ea-content .ea-text,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-content .ea-text,.ea-type-image.horizontal .ea-content .ea-text{margin-top:0em;text-align:left;overflow:auto}[data-ea-type=image].loaded.horizontal .ea-callout,[data-ea-publisher]:not([data-ea-type]).loaded.horizontal .ea-callout,.ea-type-image.horizontal .ea-callout{max-width:320px;text-align:right}[data-ea-type=text].loaded,.ea-type-text{font-size:14px}[data-ea-type=text].loaded .ea-content,.ea-type-text .ea-content{text-align:left}[data-ea-type=text].loaded .ea-callout,.ea-type-text .ea-callout{margin:.5em 1em 1em 1em;padding-left:1em;padding-right:1em;text-align:right;font-style:italic}[data-ea-style=stickybox].loaded{position:fixed;bottom:20px;right:20px;z-index:10}[data-ea-style=stickybox].loaded .ea-type-image .ea-stickybox-hide{cursor:pointer;position:absolute;top:.75em;right:.75em;background-color:#fefefe;border:1px solid #088cdb;border-radius:50%;color:#088cdb;font-size:1em;text-align:center;height:1.5em;width:1.5em;line-height:1.5em}@media(max-width: 1300px){[data-ea-style=stickybox].loaded{position:static;bottom:0;right:0;margin:auto;text-align:center}[data-ea-style=stickybox].loaded .ea-stickybox-hide{display:none}}@media(min-width: 1301px){[data-ea-style=stickybox].loaded .ea-type-image .ea-content{background:#dcdcdc}[data-ea-style=stickybox].loaded.dark .ea-type-image .ea-content{background:#505050}}@media(min-width: 1301px)and (prefers-color-scheme: dark){[data-ea-style=stickybox].loaded.adaptive .ea-type-image .ea-content{background:#505050}}[data-ea-style=fixedfooter].loaded{position:fixed;bottom:0;left:0;z-index:200;width:100%;max-width:100%}[data-ea-style=fixedfooter].loaded .ea-type-text{width:100%;max-width:100%;display:flex;z-index:200;background:#dcdcdc}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{border:0px;border-radius:3px;box-shadow:none}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-content{background-color:inherit;max-width:100%;margin:0;padding:1em;flex:auto}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{max-width:100%;margin:0;padding:1em;flex:initial}@media(max-width: 576px){[data-ea-style=fixedfooter].loaded .ea-type-text .ea-callout{display:none}}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide{cursor:pointer;color:#505050;padding:1em;flex:initial;margin:auto 0}[data-ea-style=fixedfooter].loaded .ea-type-text .ea-fixedfooter-hide span{padding:.25em;font-size:.8em;font-weight:bold;border:.15em solid #505050;border-radius:.5em;white-space:nowrap}[data-ea-style=fixedfooter].loaded.dark .ea-type-text{background:#505050}[data-ea-style=fixedfooter].loaded.dark .ea-type-text .ea-fixedfooter-hide span{color:#dcdcdc;border-color:#dcdcdc}@media(prefers-color-scheme: dark){[data-ea-style=fixedfooter].loaded.adaptive .ea-type-text{background:#505050}[data-ea-style=fixedfooter].loaded.adaptive .ea-type-text .ea-fixedfooter-hide span{color:#dcdcdc;border-color:#dcdcdc}}</style><script src="./launch_files/saved_resource" type="text/javascript" async=""></script><script src="./launch_files/saved_resource(1)" type="text/javascript" async=""></script></head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+
+          
+          
+          <a href="https://extendscript.docsforadobe.dev/index.html" class="icon icon-home">
+            JavaScript Tools Guide CC
+          </a>
+              <div class="version">
+                latest
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="https://extendscript.docsforadobe.dev/search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" _mstplaceholder="154934" _mstaria-label="154934">
+    <input type="hidden" name="check_keywords" value="yes">
+    <input type="hidden" name="area" value="default">
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu" _mstaria-label="263055">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/introduction/extendscript-overview.html">ExtendScript overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/introduction/scripting-for-specific-applications.html">Scripting for specific applications</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The VS Code ExtendScript Debugger</span></p>
+<ul class="current" aria-expanded="true">
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/index.html">The VS Code Debugger</a></li>
+<li class="toctree-l1 current" aria-expanded="true"><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#" aria-expanded="false"><button class="toctree-expand" title="Open/close menu"></button><font _mstmutation="1">Getting Started with the VS Code Debugger</font></a><ul>
+<li class="toctree-l2 current" aria-expanded="true"><a class="reference internal current" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#installing-the-extension" aria-expanded="true">Installing the extension</a></li>
+<li class="toctree-l2" aria-expanded="false"><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#opening-a-project-directory" aria-expanded="false">Opening a project directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#creating-a-debug-launch-task">Creating a debug launch task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#attaching-the-debugger">Attaching the debugger</a></li>
+<li class="toctree-l2" aria-expanded="false"><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#running-the-debugger" aria-expanded="false">Running the debugger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#futher-reading">Futher reading</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/vscode-extension-features.html">VS Code Extension Features</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The ExtendScript Toolkit</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-toolkit/index.html">The ExtendScript Toolkit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-toolkit/configuring-the-toolkit-window.html">Configuring the Toolkit window</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-toolkit/selecting-scripts.html">Selecting Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-toolkit/the-script-editor.html">The Script Editor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-toolkit/debugging-in-the-toolkit.html">Debugging in the Toolkit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-toolkit/code-profiling-for-optimization.html">Code profiling for optimization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-toolkit/inspecting-object-models.html">Inspecting object models</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">File System Access</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/file-system-access/index.html">File System Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/file-system-access/using-file-and-folder-objects.html">Using File and Folder objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/file-system-access/file-access-error-messages.html">File access error messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/file-system-access/file-and-folder-supported-encoding-names.html">File- and Folder-supported encoding names</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/file-system-access/file-object.html">File object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/file-system-access/folder-object.html">Folder object</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User-Interface Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/index.html">User-Interface Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/code-examples-for-scriptui.html">Code examples for ScriptUI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-programming-model.html">ScriptUI programming model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/types-of-controls.html">Types of controls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/size-and-location-objects.html">Size and location objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/drawing-objects.html">Drawing objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/resource-specifications.html">Resource specifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/defining-behavior-with-event-callbacks-and-listeners.html">Defining behavior with event callbacks and listeners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/communicating-with-the-flash-application.html">Communicating with the Flash application</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/automatic-layout.html">Automatic layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/managing-control-titles.html">Managing control titles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/localization-in-scriptui-objects.html">Localization in ScriptUI objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-object-reference.html">ScriptUI object reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/scriptui-class.html">ScriptUI class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/environment.html">Environment object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/common-properties.html">Common properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/window-class.html">Window class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/window-object.html">Window object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/control-objects.html">Control objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/event-handling.html">Event handling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/graphic-customization-objects.html">Graphic customization objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/user-interface-tools/layoutmanager-object.html">LayoutManager object</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Interapplication Communication with Scripts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/interapplication-communication/index.html">Interapplication Communication with Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/interapplication-communication/communications-overview.html">Communications overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/interapplication-communication/cross-dom-functions.html">Cross-DOM functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/interapplication-communication/communicating-through-messages.html">Communicating through messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/interapplication-communication/messaging-framework-api-reference.html">Messaging framework API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/interapplication-communication/bridgetalk-class.html">BridgeTalk class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/interapplication-communication/bridgetalk-message-object.html">BridgeTalk message object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/interapplication-communication/messaging-error-codes.html">Messaging error codes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/interapplication-communication/application-and-namespace-specifiers.html">Application and namespace specifiers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">External Communication Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/external-communication/index.html">External Communication Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/external-communication/socket-object.html">Socket object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/external-communication/socket-object-reference.html">Socket object reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrating External Libraries</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/integrating-external-libraries/index.html">Integrating External Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/integrating-external-libraries/loading-and-using-shared-libraries.html">Loading and using shared libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/integrating-external-libraries/externalobject-object.html">ExternalObject object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/integrating-external-libraries/defining-entry-points-for-direct-access.html">Defining entry points for direct access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/integrating-external-libraries/defining-entry-points-for-indirect-access.html">Defining entry points for indirect access</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">ExtendScript Tools and Features</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-tools-features/index.html">ExtendScript Tools and Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-tools-features/dollar-object.html">Dollar ($) object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-tools-features/extendscript-reflection-interface.html">ExtendScript reflection interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-tools-features/localizing-extendscript-strings.html">Localizing ExtendScript strings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-tools-features/user-notification-dialogs.html">User notification dialogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-tools-features/specifying-measurement-values.html">Specifying measurement values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-tools-features/preprocessor-directives.html">Preprocessor directives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/extendscript-tools-features/operator-overloading.html">Operator overloading</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Integrating XML into JavaScript</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/integrating-xml/index.html">Integrating XML into JavaScript</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/integrating-xml/the-xml-object.html">The XML Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/integrating-xml/xml-object-reference.html">XML Object Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Scripting Access to XMP Metadata</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/scripting-xmp/index.html">Scripting Access to XMP Metadata</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/scripting-xmp/accessing-the-xmp-scripting-api.html">Accessing the XMP scripting API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="https://extendscript.docsforadobe.dev/scripting-xmp/xmpscript-object-reference.html">XMPScript object reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" _mstaria-label="458536">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="https://extendscript.docsforadobe.dev/index.html">JavaScript Tools Guide CC</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation" _mstaria-label="258947">
+  <ul class="wy-breadcrumbs">
+      <li><a href="https://extendscript.docsforadobe.dev/index.html" class="icon icon-home" aria-label="Home" _mstaria-label="43979"></a></li>
+      <li class="breadcrumb-item active">Getting Started with the VS Code Debugger</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/docsforadobe/javascript-tools-guide/blob/master/docs/vscode-debugger/getting-started-with-vscode-debugger.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started-with-the-vs-code-debugger">
+<span id="getting-started-with-vscode-debugger"></span><h1><font _mstmutation="1">Getting Started with the VS Code Debugger</font><a class="headerlink" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#getting-started-with-the-vs-code-debugger" title="Permalink to this heading">¶</a></h1>
+<p>Unlike the ExtendScript Toolkit, the VS Code debugger takes some work to get up and running. This document is intended to make that process as straightforward as possible.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This guide is meant to walk you through how to install and run the Extendscript for VS Code debugger.</p>
+<p>If you’re looking on how to use specific features of the extension, see <a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/vscode-extension-features.html#vscode-extension-features"><span class="std std-ref">VS Code Extension Features</span></a>.</p>
+</div>
+<p>Generally, you’ll need to follow these steps:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#installing-the-extension"><span class="std std-ref">Installing the extension</span></a></p></li>
+<li><p><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#opening-a-project"><span class="std std-ref">Opening a project directory</span></a></p></li>
+<li><p><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#creating-a-debug-launch-task"><span class="std std-ref">Creating a debug launch task</span></a></p></li>
+<li><p><span class="xref std std-ref">attaching-the-debugger</span></p></li>
+<li><p><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#running-the-debugger"><span class="std std-ref">Running the debugger</span></a></p></li>
+<li><p><a class="reference internal" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#further-reading"><span class="std std-ref">Futher reading</span></a></p></li>
+</ul>
+<hr class="docutils">
+<section id="installing-the-extension">
+<span id="id1"></span><h2><font _mstmutation="1">Installing the extension</font><a class="headerlink" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#installing-the-extension" title="Permalink to this heading">¶</a></h2>
+<p>Either head to the <a class="reference external" href="https://marketplace.visualstudio.com/items?itemName=Adobe.extendscript-debug">extension marketplace link</a> and install from there, or search “ExtendScript Debugger” within VS Code’s extension browser and install.</p>
+<p>If you’re going the latter route, make sure you’re installing the one from Adobe!</p>
+<hr class="docutils">
+</section>
+<section id="opening-a-project-directory">
+<span id="opening-a-project"></span><h2><font _mstmutation="1">Opening a project directory</font><a class="headerlink" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#opening-a-project-directory" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><cite>File &gt; Open Folder</cite></p></li>
+<li><p>Choose your project directory</p></li>
+</ul>
+<hr class="docutils">
+</section>
+<section id="creating-a-debug-launch-task">
+<span id="id2"></span><h2><font _mstmutation="1">Creating a debug launch task</font><a class="headerlink" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#creating-a-debug-launch-task" title="Permalink to this heading">¶</a></h2>
+<p>To use the extension, you need to create a debug task for VS Code to run when you want to debug extendscript.</p>
+<p>In your project directory:</p>
+<blockquote>
+<div><ul>
+<li><p>create a folder called <cite>.vscode</cite> (with the period)</p></li>
+<li><p>in that folder, create a file <cite>launch.json</cite></p></li>
+<li><p>paste in the following code</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>“version”: “0.2.0”,
+“configurations”: [</p>
+<blockquote>
+<div><dl class="simple">
+<dt>{</dt><dd><p>“type”: “extendscript-debug”,
+“request”: “attach”,
+“name”: “extendScript-Debug attach”,</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>}</p>
+</li>
+</ul>
+</div></blockquote>
+<p>This creates a config for VSCode’s debugger that attaches to the host app of your choice.</p>
+</section>
+<section id="attaching-the-debugger">
+<h2><font _mstmutation="1">Attaching the debugger</font><a class="headerlink" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#attaching-the-debugger" title="Permalink to this heading">¶</a></h2>
+<p>Once the extension is installed:</p>
+<ul class="simple">
+<li><p>Open a JS workspace</p></li>
+<li><p>Launch your Adobe app of choice</p></li>
+<li><p>Select the run and Debug tab from the sidebar or hit Ctrl+Shift+D, then in the drop-down menu choose “extendScript-Debug attach”</p></li>
+<li><p>Choose the host app from the drop-down that appears</p></li>
+</ul>
+<p>The bottom Status bar will turn orange indicating that the debugger is now attached to the host app. You can use the debug console to evaluate commands and query variables, even if a script is not running.</p>
+<hr class="docutils">
+</section>
+<section id="running-the-debugger">
+<span id="id3"></span><h2><font _mstmutation="1">Running the debugger</font><a class="headerlink" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#running-the-debugger" title="Permalink to this heading">¶</a></h2>
+<p>Once you’ve set up your environment and built your script:</p>
+<ul class="simple">
+<li><p>Click on the status bar button labelled “▷ Eval in <cite>host app name</cite>” to launch the current script, or use the command pallette and choose <cite>ExtendScript - Evaluate Script In Attached Host</cite>.</p></li>
+<li><p>If the script throws any errors, you’ll be able to view variables &amp; a call stack</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you’re compiling the end jsx file from a number of source files, the debugger will catch errors in the <em>compiled</em> script, not the source files – you’ll need to backtrack yourself to figure out what source file the error came from, unless you’re building source maps in some way.</p>
+<p>This may not apply to compiled files using <cite>#include</cite></p>
+</div>
+<hr class="docutils">
+</section>
+<section id="futher-reading">
+<span id="further-reading"></span><h2><font _mstmutation="1">Futher reading</font><a class="headerlink" href="https://extendscript.docsforadobe.dev/vscode-debugger/getting-started-with-vscode-debugger.html#futher-reading" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://code.visualstudio.com/docs/editor/debugging">Debugging in VS Code</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer" _mstaria-label="78208">
+        <a href="https://extendscript.docsforadobe.dev/vscode-debugger/index.html" class="btn btn-neutral float-left" title="The VS Code Debugger" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span><font _mstmutation="1"> Previous</font></a>
+        <a href="https://extendscript.docsforadobe.dev/vscode-debugger/vscode-extension-features.html" class="btn btn-neutral float-right" title="VS Code Extension Features" accesskey="n" rel="next"><font _mstmutation="1">Next </font><span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr><div><div id="rtd-sidebar" data-ea-publisher="readthedocs" data-ea-type="image" data-ea-manual="true" data-ea-style="stickybox" class="ethical-rtd loaded loaded" data-ea-keywords="adobe|after-effects|extendscript|illustrator|indesign|only words|photoshop|premiere|readthedocs-project-68825|readthedocs-project-javascript-tools-guide" data-ea-campaign-types="community|house|paid"><div class="ea-placement ea-type-image"><div class="ea-content"><a href="https://server.ethicalads.io/proxy/click/6471/55957562-bdd6-4338-a614-95f31d931a60/" rel="nofollow noopener sponsored" target="_blank"><img src="./launch_files/Screenshot_2022-11-10_at_2.31.28_PM.png" alt="Sponsored: Read the Docs" _mstalt="463905"></a><div class="ea-text"><a href="https://server.ethicalads.io/proxy/click/6471/55957562-bdd6-4338-a614-95f31d931a60/" rel="nofollow noopener sponsored" target="_blank"><strong class="ea-headline">Docs as Code hosting </strong><span class="ea-body">is easy on Read the Docs. Free for open source, paid for business.</span><strong class="ea-cta"> Sign up today.</strong></a></div></div><div class="ea-callout"><a rel="nofollow noopener" target="_blank" href="https://www.ethicalads.io/advertisers/topics/backend-web/?ref=ea-image">Ads by EthicalAds</a></div><div class="ea-stickybox-hide">×</div></div><img src="./launch_files/saved_resource(2)" class="ea-pixel"><img src="./launch_files/saved_resource(3)" class="ea-pixel"></div></div>
+
+  <div role="contentinfo">
+    <p>© Copyright 2016, Adobe Systems Incorporated.
+      <span class="commit">Revision <code>dfac25e6</code>.
+      </span></p>
+  </div><font _mstmutation="1">
+
+  Built with <a href="https://www.sphinx-doc.org/" _mstmutation="1">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme" _mstmutation="1">theme</a>
+    provided by <a href="https://readthedocs.org/" _mstmutation="1">Read the Docs</a>.
+   
+
+<a href="https://github.com/MrDogeBro/sphinx_rtd_dark_mode" _mstmutation="1">Dark theme</a> provided by <a href="http://mrdogebro.com/" _mstmutation="1">MrDogeBro</a>.</font></footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions shift" data-toggle="rst-versions" role="note" aria-label="Versions" _mstaria-label="118469">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span><font _mstmutation="1">
+      v: latest
+      </font><span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions"><!-- Inserted RTD Footer -->
+
+<div class="injected">
+
+  
+
+      
+      
+      
+      
+
+      
+      
+      <dl>
+        <dt>ダウンロード</dt>
+        
+        <dd><a href="https://extendscript.docsforadobe.dev/_/downloads/en/latest/pdf/">PDF</a></dd>
+        
+      </dl>
+      
+      
+
+      
+      <dl>
+        
+        <!-- These are kept as relative links for internal installs that are http -->
+        <dt>On Read the Docs</dt>
+        <dd>
+          <a href="https://readthedocs.org/projects/javascript-tools-guide/">Project Home</a>
+        </dd>
+        <dd>
+          <a href="https://readthedocs.org/projects/javascript-tools-guide/builds/">ビルド</a>
+        </dd>
+        <dd>
+          <a href="https://readthedocs.org/projects/javascript-tools-guide/downloads/">ダウンロード</a>
+        </dd>
+      </dl>
+      
+
+      
+
+      
+      <dl>
+        <dt>On GitHub</dt>
+        <dd>
+          <a href="https://github.com/docsforadobe/javascript-tools-guide/blob/master/docs/vscode-debugger/getting-started-with-vscode-debugger.rst">ビュー</a>
+        </dd>
+        
+        <dd>
+          <a href="https://github.com/docsforadobe/javascript-tools-guide/edit/master/docs/vscode-debugger/getting-started-with-vscode-debugger.rst">編集</a>
+        </dd>
+        
+      </dl>
+      
+      
+
+      
+      <dl>
+        <dt>検索</dt>
+        <dd>
+          <div style="padding: 6px;">
+            
+            <form id="flyout-search-form" class="wy-form" target="_blank" action="https://readthedocs.org/projects/javascript-tools-guide/search/" method="get">
+              <input type="text" name="q" aria-label="Search docs" placeholder="Search docs" _mstplaceholder="154934" _mstaria-label="154934">
+              </form>
+          </div>
+        </dd>
+      </dl>
+      
+
+      <hr>
+
+      
+        <small>
+          <span>Hosted by <a href="https://readthedocs.org/">Read the Docs</a></span>
+          <span> · </span>
+          <a href="https://docs.readthedocs.io/page/privacy-policy.html">プライバシーポリシー</a>
+        </small>
+      
+
+      
+
+</div>
+</div>
+  </div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+
+<button class="theme-switcher" id="themeSwitcher"><i id="themeMoon" class="fa fa-moon-o"></i><i id="themeSun" class="fa fa-sun-o" style="display: none;"></i></button></body></html>
