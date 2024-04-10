@@ -1,8 +1,8 @@
 (function (me){
 	var pref = {};
-	pref.unitMode = 0;
+	pref.unitMode = 1;
 	pref.moveV = 10;
-	pref.dpi = 300;
+	pref.dpi = 72;
 
 
  // 環境設定ファイルのFileオブジェクトを返す
@@ -63,16 +63,9 @@
 					if((v!=undefined)&&(typeof(v)=="number")){ pref.moveV = v; v=null;}
 					v = obj.unitMode;
 					if((v!=undefined)&&(typeof(v)=="number")){
-						if (v<0){v=0;}else if (v>2){v=2;}
+						if (v<0){v=0;}else if (v>1){v=1;}
 						pref.unitMode = v;
 						v=null;
-					}
-					v = obj.dpi;
-					if((v!=undefined)&&(typeof(v)=="number"))
-					{
-						if (v<72) {v=72;}
-						pref.dpi = v;
-						 v=null;
 					}
 
                 }catch(e){
@@ -220,28 +213,6 @@
 					break;
 				case 1:
 					break;
-				case 2:
-					try{
-						dpi = eval(edDpi.text);
-						if (typeof(dpi)!="number")
-						{
-							ret = null;
-							return;
-						}
-						if (dpi<72)
-						{
-							dpi = 72;
-							edDpi.text = dpi+"";
-						}
-						pref.dpi = dpi;
-						ret = ret.pxToMM(pref.dpi).mmToPoint();
-					}catch(e){
-						alert("dpi異常\r\n"+e.toString());
-						ret =null;
-					}
-					break;
-
-
 			}
 			return ret;
 		}
@@ -294,18 +265,12 @@
 		var cbs =[];
 		cbs.push(winObj.add("radiobutton",[x,y,x+55,y+25],"mm"));
 		x +=60;
-		cbs.push(winObj.add("radiobutton",[x,y,x+55,y+25],"Point"));
-		x +=60;
 		cbs.push(winObj.add("radiobutton",[x,y,x+55,y+25],"Pixel"));
 
 
 		y += 26;
 		x -= 10;
-		var stDpi = winObj.add("statictext",[x,y,x+30,y+25],"dpi");
-		x += 30;
-		var edDpi = winObj.add("edittext",[x,y,x+50,y+25],pref.dpi);
 		cbs[pref.unitMode].value = true;
-		edDpi.enabled = (pref.unitMode ==2);
 
 		for(var i=0;i<cbs.length;i++)
 		{
@@ -313,7 +278,6 @@
 			cbs[i].onClick = function()
 			{
 				pref.unitMode = this.cIndex;
-				edDpi.enabled = (pref.unitMode ==2);
 				savePref();
 			}
 		}

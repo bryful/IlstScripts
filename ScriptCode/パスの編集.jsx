@@ -1,7 +1,5 @@
 (function (me){
 	var pref ={};
-	pref.unitMode = 0;
-	pref.dpi = 300;
 	pref.left = 0;
 	pref.top = 0;
 	pref.width = 730;
@@ -58,12 +56,6 @@ var getPrefFile = function()
                 try{
                     s = prefFile.read();
                     var obj = eval(s);
-					v = obj.unitMode;
-					if((v!=undefined)&&(typeof(v)=="number")){ pref.unitMode = v; v=null;}
-					v = obj.dpi;
-					if((v!=undefined)&&(typeof(v)=="number")){ pref.dpi = v; v=null;}
-					v = obj.rot;
-					if((v!=undefined)&&(typeof(v)=="number")){ pref.rot = v; v=null;}
 					v = obj.left;
 					if((v!=undefined)&&(typeof(v)=="number")){ pref.left = v; v=null;}
 					v = obj.top;
@@ -102,90 +94,15 @@ var getPrefFile = function()
             alert("savePref : no prefFile!\r\n");
         }
     }
-	//-------------------------------------------------------------------------
-	Number.prototype.pointToMM = function()
-	{
-		try{
-			return this/2.834645;
-		}catch(e){
-			alert(e.toString());
-		}
-	}
-	Number.prototype.mmToPoint = function()
-	{
-		try{
-			return this*2.834645;
-		}catch(e){
-			alert(e.toString());
-		}
-	}
-	Number.prototype.mmToPx = function(dpi)
-	{
-		try{
-			return this*dpi/25.4;
-		}catch(e){
-			alert(e.toString());
-		}
-	}
-	Number.prototype.pxToMM = function(dpi)
-	{
-		try{
-			return this*25.4/dpi;
-		}catch(e){
-			alert(e.toString());
-		}
-	}
-	//**************************************************************************************
-	var toValue=function(v)
-	{
-		var ret =[0,0];
-		switch(pref.unitMode)
-		{
-			case 0:
-				ret[0] = v[0].pointToMM();
-				ret[1] = v[1].pointToMM();
-				break;
-			case 1:
-				ret[0] = v[0];
-				ret[1] = v[1];
-				break;
-			case 2:
-				ret[0] = v[0].pointToMM().mmToPx(pref.dpi);
-				ret[1] = v[1].pointToMM().mmToPx(pref.dpi);
-				break;
-		}
-		return ret;
-	}
-	//**************************************************************************************
-	var fromValue=function(v)
-	{
-		var ret =[0,0];
-		switch(pref.unitMode)
-		{
-			case 0:
-				ret[0] = v[0].mmToPoint();
-				ret[1] = v[1].mmToPoint();
-				break;
-			case 1:
-				ret[0] = v[0];
-				ret[1] = v[1];
-				break;
-			case 2:
-				ret[0] = v[0].pxToMM(pref.dpi).mmToPoint();
-				ret[1] = v[1].pxToMM(pref.dpi).mmToPoint();
-				break;
-		}
-		return ret;
-	}
 	var dispValue = function(v)
 	{
 		var ret = "";
 		for(var i=0; i<v.length;i++)
 		{
 			var s = [0,0,0];
-			s[0] = toValue(v[i][0]);
-			s[1] = toValue(v[i][1]);
-			s[2] = toValue(v[i][2]);
+			s[0] = v[i][0];
+			s[1] = v[i][1];
+			s[2] = v[i][2];
 			ret += s.toSource()+",\r\n";
 		}
 		ret = "[\r\n" + ret +"]\r\n";
@@ -204,9 +121,9 @@ var getPrefFile = function()
 				for(var i=0; i<obj.length;i++)
 				{
 					var s = [0,0,0];
-					s[0] = fromValue(obj[i][0]);
-					s[1] = fromValue(obj[i][1]);
-					s[2] = fromValue(obj[i][2]);
+					s[0] = (obj[i][0]);
+					s[1] = (obj[i][1]);
+					s[2] = (obj[i][2]);
 					ret.push(s);
 				}
 			}
@@ -274,9 +191,10 @@ var getPrefFile = function()
 	//**************************************************************************************
 	var createUI = function()
 	{
-		var pathdata=[];
-		var backdata=[];
+		app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
 
+		var pdata =[];
+		var undodata =[];
 		var selObj = app.activeDocument.selection;
 		if (selObj.length!=1)
 		{
@@ -289,62 +207,13 @@ var getPrefFile = function()
 			return;
 
 		}
+
 		var rct = [pref.left,pref.top,pref.left + pref.width,pref.top+ pref.height];
 		var winObj = new Window("dialog",scriptName ,rct,{resizeable : true} );
-		var a_group1 = winObj.add("group", [12,4,12+236,4+30]);
-		var rbMM = a_group1.add("radiobutton", [3,3,3+44,3+24], "mm");
-		var rbPoint = a_group1.add("radiobutton", [53,3,53+50,3+24], "Point");
-		var rbPixel = a_group1.add("radiobutton", [108,3,108+50,3+24], "Pixel");
-		var edDPI = a_group1.add("edittext", [158,3,158+50,4+24], pref.dpi );
-		var rba = [rbMM,rbPoint,rbPixel];
-		rba[pref.unitMode].value =true;
-		edDPI.enabled = (pref.unitMode == 2);
-		for(var i=0; i<rba.length;i++)
-		{
-			rba[i].cIndex =i;
-			rba[i].onClick=function()
-			{
-				pref.unitMode = this.cIndex;
-				edDPI.enabled = (pref.unitMode == 2);
-				pref.dpi = eval(edDPI.text);
-				ed.text = dispValue(pathdata);
-				endExec();
-			}
-		}
-
-
-
-		var cbEdit = winObj.add("checkbox", [254,3,254+98,3+24], "値を編集する");
-		cbEdit.value = false;
-
+		var btnSeisu = winObj.add("button", [12,12,12+80,12+22], "整数化");
 		var ed = winObj.add("edittext", [12,35,12+695,35+360], "" ,{multiline:true,scrollable:true});
-		ed.readonly = true;
 		var btnUndo = winObj.add("button", [500,400,499+101,400+30], "Undo");
 		var btnApply = winObj.add("button", [606,400,606+101,400+30], "Apply");
-
-		function setEdit(b)
-		{
-			rba[0].enabled = !b;
-			rba[1].enabled = !b;
-			rba[2].enabled = !b;
-			if (b==true)
-			{
-				edDPI.enabled = false;
-			}else{
-				edDPI.enabled = (pref.unitMode == 2);
-			}
-			ed.readonly = ! b;
-			ed.enabled = true;
-			btnApply.enabled = b;
-			btnUndo.enabled = b;
-		}
-		setEdit(false);
-		cbEdit.onClick=function()
-		{
-			setEdit(this.value);
-		}
-
-
 
 		function resize()
 		{
@@ -381,7 +250,6 @@ var getPrefFile = function()
 		}
 		winObj.onClose = endExec;
 
-		pathdata = getPathData(selObj[0]);
 
 		var undoCount =0;
 		function setData()
@@ -391,29 +259,59 @@ var getPrefFile = function()
 			{
 				if (setPathData(selObj[0],data))
 				{
-					backdata = pathdata;
-					pathdata = data;
+					selObj = app.activeDocument.selection;
+					undodata = pdata;
+					pdata = getPathData(selObj[0]);
+					ed.text = dispValue(pdata);
 					app.redraw();
 					undoCount++;
 				}
+			}else{
+				alert("記述ミス");
 			}
 
 		}
 		btnApply.onClick = setData;
 		btnUndo.onClick = function()
 		{
-			if (undoCount>0)
-			{
-				pathdata = backdata;
-				backdata = [];
-				ed.text = dispValue(pathdata);
-				setPathData(selObj[0],pathdata);
-				app.redraw();
-				undoCount--;
+			if (undoCount>0) {
+				selObj = app.activeDocument.selection;
+
+				if (setPathData(selObj[0],undodata))
+				{
+					undodata = pdata;
+					pdata = getPathData(selObj[0]);
+					ed.text = dispValue(pdata);
+					app.redraw();
+					undoCount--;
+				}
+
 			}
 		}
 
-		ed.text = dispValue(pathdata);
+		btnSeisu.onClick=function()
+		{
+			var data = valueFromDisp(ed.text);
+			if (data!=null)
+			{
+				for ( var i=0;i<data.length;i++)
+				{
+					for(var j=0; j<3;j++)
+					{
+						data[i][j][0] = Math.round(data[i][j][0]);
+						data[i][j][1] = Math.round(data[i][j][1]);
+					}
+					ed.text = dispValue(data);
+				}
+			}else{
+				alert("記述ミス");
+			}
+
+		}
+
+		pdata =getPathData(selObj[0]);
+		undodata = pdata;
+		ed.text = dispValue(pdata);
 
 		if ((pref.left==0)||(pref.top==0))
 		{

@@ -296,6 +296,7 @@
 				stRadius.text = "";
 			}
 		}
+		var radiusCount =0;
 		function radiusExec (op)
 		{
 			if (execInfo.radius==0) return;

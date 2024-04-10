@@ -4,7 +4,6 @@
 	// 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
-		
 		{
 			"type": "extendscript-debug",
 			"request": "attach",
@@ -14,6 +13,14 @@
 			"type": "extendscript-debug",
 			"request": "launch",
 			"name": "Launch Script in ExtendScript Engine"
+		},
+		{
+			"type": "extendscript-debug",
+			"request": "launch",
+			"name": "[launch] illustrator in ExtendScript Engine",
+			"bringToFront": true,
+			"hostAppSpecifier": "illustrator",
+			"engineName": "main"
 		}
 	]
 }

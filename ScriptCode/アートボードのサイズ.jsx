@@ -1,7 +1,8 @@
 (function(){
+	var scriptName = "アートボードのサイズ";
 	var pref={};
-	pref.unitMode = 0;
-	pref.dpi = 300;
+	pref.unitMode = 1;
+	pref.dpi = 72;
 	Number.prototype.pointToMM = function()
 	{
 		try{
@@ -53,14 +54,30 @@
 				ret[2] = v[2];
 				ret[3] = v[3];
 				break;
-			case 2:
-				ret[0] = v[0].pointToMM().mmToPx(pref.dpi);
-				ret[1] = v[1].pointToMM().mmToPx(pref.dpi);
-				ret[2] = v[2].pointToMM().mmToPx(pref.dpi);
-				ret[3] = v[3].pointToMM().mmToPx(pref.dpi);
-				break;
+
+
 		}
 		return ret;
+	}
+	var resizefromValue=function(v)
+	{
+		var ret =v;
+		if(pref.unitMode==0)
+		{
+			ret[0] = v[0].mmToPoint();
+			ret[1] = v[1].mmToPoint();
+			ret[2] = v[2].mmToPoint();
+			ret[3] = v[3].mmToPoint();
+		}
+		var ad = app.activeDocument;
+		var ab = ad.artboards[ad.artboards.getActiveArtboardIndex()];
+		var r = ab.artboardRect;
+		r[0] = v[0];
+		r[1] = v[1];
+		r[2] = v[0] + v[2];
+		r[3] =  -(-v[1] + (v[3]));
+		ab.artboardRect = r;
+		app.redraw();
 	}
 	var getED = function(ed)
 	{
@@ -94,10 +111,9 @@
 		var absPoint = [];
 
 		var w = 450;
-		var winObj = new Window("dialog","アートボードのサイズ" ,[0,0,w,237] );
+		var winObj = new Window("dialog",scriptName ,[0,0,w,237]);
 		var x =20;
 		var y =6;
-
 		var btnGet = winObj.add("button", [x,y,w-x*2,y+30], "現在のアートボードのサイズを獲得");
 		y += 35;
 		var pUnit = winObj.add("panel", [x,y,w-x*2,y+50], "Unit");
@@ -106,13 +122,7 @@
 		x = 12;
 		var rbMM = pUnit.add("radiobutton", [x,y,x+50,y+20], "mm");
 		x += 50;
-		var rbPoint = pUnit.add("radiobutton", [x,y,x+65,y+20], "Point");
-		x += 65;
-		var rbPixel = pUnit.add("radiobutton", [x,y,x+55,y+20], "Pixel");
-		x+=55;
-		var edDpi = pUnit.add("edittext", [x,y,x+40,y+20], pref.dpi+"" );
-		x += 40;
-		var stDpi = pUnit.add("statictext",[x,y,x+26,y+20], "dpi" );
+		var rbPixel = pUnit.add("radiobutton", [x,y,x+65,y+20], "Pixel");
 		y = by;
 		x = 20;
 		var pSize = winObj.add("panel", [x,y,w - x*2,y+80], "Size");
@@ -137,11 +147,9 @@
 
 		var btnUndo = winObj.add("button", [25,195,25+84,195+32], "Undo");
 		var btnApply = winObj.add("button", [138,195,w-30,195+32], "Apply");
-		var rbU =[rbMM,rbPoint,rbPixel];
-		rbU[0].cIndex=0;rbU[1].cIndex=1;rbU[2].cIndex=2;
+		var rbU =[rbMM,rbPixel];
+		rbU[0].cIndex=0;rbU[1].cIndex=1;
 		rbU[pref.unitMode].value = true;
-		edDpi.enabled = (pref.unitMode == 2);
-
 		function toDisp()
 		{
 			var dd = toValue(absPoint);
@@ -151,15 +159,47 @@
 			edHeight.text = dd[3];
 		}
 		absPoint = getDocumentSize();
-		rbMM.onClick=rbPoint.onClick = rbPixel.onClick = function()
+		rbMM.onClick = rbPixel.onClick = function()
 		{
 			pref.unitMode = this.cIndex;
-			edDpi.enabled = (pref.unitMode == 2);
-			var d = getED(edDpi);
-			if (d!=null) pref.dpi = d;
+
 			toDisp();
 		}
 
+		btnGet.onClick = function()
+		{
+			absPoint = getDocumentSize();
+			toDisp();
+		}
+		var undoCount =0;
+		btnApply.onClick = function()
+		{
+			var l = getED(edLeft);
+			if (l==null) return;
+			var t = getED(edTop);
+			if (t==null) return;
+			var w = getED(edWidth);
+			if (w==null) return;
+			var h = getED(edHeight);
+			if (h==null) return;
+
+			resizefromValue([l,t,w,h])
+			undoCount++;
+			absPoint = getDocumentSize();
+			toDisp();
+		}
+		btnUndo.onClick = function()
+		{
+			if (undoCount>0)
+			{
+				app.undo();
+				app.redraw();
+				absPoint = getDocumentSize();
+				toDisp();
+				undoCount--;
+				if (undoCount<0) undoCount=0;
+			}
+		}
 		toDisp();
 
 		winObj.center();
@@ -171,3 +211,4 @@
 		alert("no document!");
 	}
 })();
+

@@ -5,8 +5,10 @@
 	{
 		var createBG = function(cIndex)
 		{
+			app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
 			var ad = app.activeDocument;
 			var ab = ad.artboards[ad.artboards.getActiveArtboardIndex()];
+
 			var rct = ab.artboardRect;
 
 			var lyr = ad.layers.add();
